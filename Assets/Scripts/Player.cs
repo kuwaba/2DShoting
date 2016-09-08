@@ -14,6 +14,9 @@ public class Player : MonoBehaviour {
     Vector2 direction;
     Vector2 endPos;
 
+    private Vector2 screenPoint;
+    private Vector2 offset;
+    private bool isDragging = false;
     // Use this for initialization
     IEnumerator Start () {
         max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
@@ -23,54 +26,47 @@ public class Player : MonoBehaviour {
         while (true)
         {
 
-
-            spaceship.Shot(transform);
+            //spaceship.Shot(transform);
             GetComponent<AudioSource>().Play();
             yield return new WaitForSeconds(spaceship.shotDelay);
         }
 
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        //float x = Input.GetAxisRaw("Horizontal");
-        //float y = Input.GetAxisRaw("Vertical");
-    #if UNITY_STANDALONE || UNITY_WEBPLAYER
-        if (Input.touchCount > 0)
+    
+    // Update is called once per frame
+    void Update () {
+
+#if UNITY_STANDALONE || UNITY_WEBPLAYER
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
+        
+        //Vector2 direction = new Vector2(x, y).normalized;
+        Vector2 direction = new Vector2(x, y);
+        if (direction.magnitude > 1)
         {
-            Touch touch = Input.GetTouch(0);
-
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    startPos = touch.position;
-                    break;
-
-                case TouchPhase.Moved:
-                case TouchPhase.Stationary:
-                    direction = touch.position - startPos;
-                    
-                    break;
-                case TouchPhase.Ended:
-                    endPos = touch.position;
-                    break;
-
-            }
-            //float x = CrossPlatformInputManager.GetAxisRaw("Horizontal");
-            //float y = CrossPlatformInputManager.GetAxisRaw("Vertical");
-            ////Vector2 direction = new Vector2(x, y).normalized;
-            //Vector2 direction = new Vector2(x, y);
-            //direction.x *= 0.01f;
-            //direction.y *= 0.01f;
-            direction.x = direction.x /max.x;
-            direction.y = direction.y / max.y;
-            if (direction.magnitude > 1)
-            {
-                direction.Normalize();
-            }
-            Move(direction);
+            direction.Normalize();
         }
-    #else
+        Move(direction);
+        Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (Input.GetMouseButtonDown(0))
+        {
+            //ドラッグ中を真.
+            isDragging = true;
+            startPos = mousePoint;
+        }
+        //左マウスボタンが離されたとき.
+        if (Input.GetMouseButtonUp(0))
+        {
+            //ドラッグ中を偽.
+            isDragging = false;
+        }
+        if (isDragging)
+        {
+            direction = mousePoint - startPos;
+
+        }
+        Move(direction);
+#else
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
@@ -132,11 +128,11 @@ public class Player : MonoBehaviour {
     {
         string layerName = LayerMask.LayerToName(c.gameObject.layer);
 
-        if (layerName == ("Bullet(Enemy)"))
-        {
+        //if (layerName == ("Bullet(Enemy)"))
+        //{
 
-            Destroy(c.gameObject);
-        }
+        //    Destroy(c.gameObject);
+        //}
         if (layerName == ("Bullet(Enemy)") || layerName == ("Enemy"))
         {
             FindObjectOfType<Manager>().GameOver();
