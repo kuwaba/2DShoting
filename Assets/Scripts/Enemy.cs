@@ -4,6 +4,8 @@ using System.Collections;
 public class Enemy : MonoBehaviour {
 
 
+    public int hp = 1;
+    public int point = 100;
     Spaceship spaceship;
     // Use this for initialization
 	IEnumerator Start () {
@@ -36,17 +38,25 @@ public class Enemy : MonoBehaviour {
     {
         string layerName = LayerMask.LayerToName(c.gameObject.layer);
 
-        if (layerName == ("Bullet(Player)"))
-        {
+        if (layerName != ("Bullet(Player)")) return;
 
-            Destroy(c.gameObject);
-        }
-        if (layerName == ("Bullet(Player)") || layerName == ("Player"))
-        {
+        Transform playerBulletTransform = c.transform.parent;
 
+        Bullet bullet = playerBulletTransform.GetComponent<Bullet>();
+
+        hp = hp - bullet.power;
+
+        Destroy(c.gameObject);
+
+        if (hp <= 0)
+        {
+            FindObjectOfType<Score>().AddPoint(point);
             spaceship.Explosion();
 
             Destroy(gameObject);
+        }else
+        {
+            spaceship.GetAnimator().SetTrigger("Damage");
         }
 
     }
