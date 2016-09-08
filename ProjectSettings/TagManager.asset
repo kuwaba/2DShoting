@@ -18,7 +18,7 @@ TagManager:
   - Bullet(Player)
   - Bullet(Enemy)
   - DestroyArea
-  - 
+  - PunipuniController
   - 
   - 
   - 
@@ -46,4 +46,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3932056491
+    locked: 0
+  - name: BlackScreen
+    uniqueID: 208638641
     locked: 0

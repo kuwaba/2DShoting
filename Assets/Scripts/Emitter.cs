@@ -9,6 +9,8 @@ public class Emitter : MonoBehaviour {
     private int currentWave;
 
     private Manager manager;
+
+    private GameObject wave;
 	// Use this for initialization
 	IEnumerator Start () {
 
@@ -26,23 +28,24 @@ public class Emitter : MonoBehaviour {
                 yield return new WaitForEndOfFrame();
             }
 
-            GameObject wave = (GameObject)Instantiate(waves[currentWave], transform.position, Quaternion.identity);
+            wave = (GameObject)Instantiate(waves[currentWave], transform.position, Quaternion.identity);
 
             wave.transform.parent = transform;
 
-            while(wave.transform.childCount != 0)
+            while(manager.IsPlaying() != false && wave.transform.childCount != 0)
             {
                 yield return new WaitForEndOfFrame();
             }
 
             Destroy(wave);
 
-            if(waves.Length <= ++currentWave)
+            if(waves.Length <= ++currentWave || manager.IsPlaying() == false)
             {
                 currentWave = 0;
             }
         }
 	
 	}
+
 	
 }
