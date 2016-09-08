@@ -19,12 +19,32 @@ public class Spaceship : MonoBehaviour {
     void Start()
     {
         animator = GetComponent<Animator>();
+        StartCoroutine(Shoot());
+
     }
 
-	public void Shot (Transform origin){
-        Instantiate(bullet, origin.position, origin.rotation);
-	
-	}
+	IEnumerator Shoot (){
+        while (canShot)
+        {
+
+            // shotDelay秒待つ
+            yield return new WaitForSeconds(shotDelay);
+
+            // 子要素を全て取得する
+            foreach (Transform child in transform)
+            {
+
+                //Debug.Log(child.transform.position);
+                long start = System.DateTime.Now.Ticks;
+                // ShotPositionの位置/角度で弾を撃つ
+                ObjectPool.instance.GetGameObject(bullet, child.transform.position, child.transform.rotation);
+
+                // 処理時間でInstantiateとObjectPoolを比較してみる
+                //Debug.Log(System.DateTime.Now.Ticks - start);
+            }
+        }
+
+    }
 	
    
     public void Explosion()

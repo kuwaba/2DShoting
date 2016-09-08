@@ -18,16 +18,16 @@ public class Enemy : MonoBehaviour {
         }
 
 
-        while (true)
-        {
-            for(int i = 0; i < transform.childCount; i++)
-            {
-                Transform shotPosition = transform.GetChild(i);
+        //while (true)
+        //{
+        //    for(int i = 0; i < transform.childCount; i++)
+        //    {
+        //        Transform shotPosition = transform.GetChild(i);
 
-                spaceship.Shot(shotPosition);
-            }
-            yield return new WaitForSeconds(spaceship.shotDelay);
-        }
+        //        spaceship.Shoot();
+        //    }
+        //    yield return new WaitForSeconds(spaceship.shotDelay);
+        //}
         
     }
     public void Move(Vector2 direction)
@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour {
 
         hp = hp - bullet.power;
 
-        Destroy(c.gameObject);
+        //Destroy(c.gameObject);
 
         if (hp <= 0)
         {
