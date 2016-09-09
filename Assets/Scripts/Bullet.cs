@@ -49,12 +49,13 @@ public class Bullet : MonoBehaviour {
     }
     void OnEnable()
     {
-        GetComponent<Rigidbody2D>().velocity = transform.up.normalized * speed;
-        StartCoroutine(DelayMethod(lifeTime, () =>
-        {
-            ObjectPool.instance.ReleaseGameObject(gameObject);
+        Start();
+        //GetComponent<Rigidbody2D>().velocity = transform.up.normalized * speed;
+        //StartCoroutine(DelayMethod(lifeTime, () =>
+        //{
+        //    ObjectPool.instance.ReleaseGameObject(gameObject);
 
-        }));
+        //}));
 
     }
 

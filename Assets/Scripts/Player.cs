@@ -64,43 +64,76 @@ public class Player : MonoBehaviour {
         {
             direction = mousePoint - startPos;
 
+
+        }
+        direction.x = direction.x / max.x;
+        direction.y = direction.y / max.y;
+        if (direction.magnitude > 1)
+        {
+            direction.Normalize();
+            Debug.Log("over");
         }
         Move(direction);
 #else
-        if (Input.touchCount > 0)
+        Vector2 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (Input.GetMouseButtonDown(0))
         {
-            Touch touch = Input.GetTouch(0);
+            //ドラッグ中を真.
+            isDragging = true;
+            startPos = mousePoint;
+        }
+        //左マウスボタンが離されたとき.
+        if (Input.GetMouseButtonUp(0))
+        {
+            //ドラッグ中を偽.
+            isDragging = false;
+        }
+        if (isDragging)
+        {
+            direction = mousePoint - startPos;
 
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    startPos = touch.position;
-                    break;
-
-                case TouchPhase.Moved:
-                case TouchPhase.Stationary:
-                    direction = touch.position - startPos;
-
-                    break;
-                case TouchPhase.Ended:
-                    endPos = touch.position;
-                    break;
-
-            }
-            //float x = CrossPlatformInputManager.GetAxisRaw("Horizontal");
-            //float y = CrossPlatformInputManager.GetAxisRaw("Vertical");
-            ////Vector2 direction = new Vector2(x, y).normalized;
-            //Vector2 direction = new Vector2(x, y);
-            //direction.x *= 0.01f;
-            //direction.y *= 0.01f;
-            direction.x = direction.x / max.x;
-            direction.y = direction.y / max.y;
-            if (direction.magnitude > 1)
-            {
-                direction.Normalize();
-            }
             Move(direction);
         }
+        //direction.x = direction.x / (max.x * 10.0f);
+        //direction.y = direction.y / (max.y * 10.0f);
+        //Debug.Log(max.x.ToString()+"," + max.y.ToString());
+        //Debug.Log(direction.x.ToString() + "," + direction.y.ToString() + "->" +direction.magnitude.ToString());
+        //Move(direction);
+        //if (Input.touchCount > 0)
+        //{
+        //    Touch touch = Input.GetTouch(0);
+
+        //    switch (touch.phase)
+        //    {
+        //        case TouchPhase.Began:
+        //            startPos = touch.position;
+        //            break;
+
+        //        case TouchPhase.Moved:
+        //        case TouchPhase.Stationary:
+        //            direction = touch.position - startPos;
+
+        //            break;
+        //        case TouchPhase.Ended:
+        //            endPos = touch.position;
+        //            break;
+
+        //    }
+        //    //float x = CrossPlatformInputManager.GetAxisRaw("Horizontal");
+        //    //float y = CrossPlatformInputManager.GetAxisRaw("Vertical");
+        //    ////Vector2 direction = new Vector2(x, y).normalized;
+        //    //Vector2 direction = new Vector2(x, y);
+        //    //direction.x *= 0.01f;
+        //    //direction.y *= 0.01f;
+        //    Debug.Log(direction.x.ToString() + ","+ direction.y.ToString());
+        //    direction.x = direction.x / (max.x *10.0f);
+        //    direction.y = direction.y / (max.y *10.0f);
+        //    if (direction.magnitude > 2.0f)
+        //    {
+        //        direction.Normalize();
+        //    }
+        //    Move(direction);
+        //}
 #endif
     }
 
